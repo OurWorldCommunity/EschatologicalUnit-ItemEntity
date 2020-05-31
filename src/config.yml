@@ -1,0 +1,9 @@
+###EschatologicalUnit.ItemEntity配置文件###
+#该插件为OurWorld服务器EschatologicalUnit小游戏项目的一个原创插件
+#实体掉落物
+
+config:
+    #本插件提示消息的前缀
+    prefix: "[EschatologicalUnit]"
+
+

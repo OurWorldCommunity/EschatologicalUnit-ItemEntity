@@ -1,0 +1,8 @@
+name: EschatologicalUnit.ItemEntity
+main: online.smyhw.EschatologicalUnit.ItemEntity.smyhw
+version: 1.0.0
+author: smyhw
+commands:
+  euIE:
+    description: euIE
+    usage: /<command>
