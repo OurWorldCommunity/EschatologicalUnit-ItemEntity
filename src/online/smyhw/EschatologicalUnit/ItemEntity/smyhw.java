@@ -69,24 +69,85 @@ public class smyhw extends JavaPlugin implements Listener
                 	loger.warning(prefix+"使用者<"+sender.getName()+">试图非法使用指令<"+args+">{权限不足}");
                 	return true;
                 }
-                if(args.length<3) {CSBZ(sender);return true;}
-                Player p = (Player)sender;
-                ItemStack item = p.getInventory().getItemInMainHand();
-                Location l = p.getLocation();
-                l.setPitch(0);
-                l.setYaw(0);
-                Entity en = p.getWorld().spawnEntity(l,EntityType.ARMOR_STAND);
-                ArmorStand as = (ArmorStand)en;
-//                as.setArms(true);
-                as.setHelmet(item);
-                EulerAngle ea = new EulerAngle(new Double(args[0]),new Double(args[1]),new Double(args[2]));
-            	as.setHeadPose(ea);
-            	as.setInvulnerable(true);//无敌
-            	as.setGravity(false);//重力
-            	as.setVisible(false);//隐身
-                return true;                                                       
+               
+                switch(args[0])
+                {
+                case "c":
+                case "create":
+                {
+                	if(args.length<4) {CSBZ(sender);return true;}
+                    Player p = (Player)sender;
+                    ItemStack item = p.getInventory().getItemInMainHand();
+                    Location l = p.getLocation();
+                    l.setPitch(0);
+                    l.setYaw(0);
+                    l.setWorld(p.getWorld());
+                    EulerAngle ea = new EulerAngle(new Double(args[1]),new Double(args[2]),new Double(args[3]));
+                    create(item,l,ea);
+
+                	if(args.length<5 && args[4].equals("config"))
+                	{
+                		Set<String> temp1 = configer.getConfigurationSection("data").getKeys(false);
+                		int temp2 = temp1.size();
+                		while(configer.getItemStack("data."+temp2+".item")!=null)
+                		{temp2++;}
+                		configer.set("data."+temp2+".item", item);
+                		configer.set("data."+temp2+".x", l.getX());
+                		configer.set("data."+temp2+".y", l.getY());
+                		configer.set("data."+temp2+".z", l.getZ());
+                		configer.set("data."+temp2+".jx",ea.getX());
+                		configer.set("data."+temp2+".jy", ea.getY());
+                		configer.set("data."+temp2+".jz", ea.getZ());
+                		configer.set("data."+temp2+".world", p.getWorld().getName());
+                		saveConfig();
+                		sender.sendMessage(prefix+"该物品<"+temp1+">已被记录至配置文件");
+                	}
+                	sender.sendMessage(prefix+"创建完毕");
+                    return true;
+                }
+                case "configer":
+                {//将配置文件中的所有物品进行创建
+                	Set<String> temp1 = configer.getConfigurationSection("data").getKeys(false);
+                	for(String temp2:temp1)
+                	{
+                		ItemStack item = configer.getItemStack("data."+temp2+".item");
+                		int x = configer.getInt("data."+temp2+".x");
+                		int y = configer.getInt("data."+temp2+".y");
+                		int z = configer.getInt("data."+temp2+".z");
+                		Location location = new Location(Bukkit.getWorld(configer.getString("data."+temp2+".world")),x,y,z);
+                		Double jx = configer.getDouble("data."+temp2+".jx");
+                		Double jy = configer.getDouble("data."+temp2+".jy");
+                		Double jz = configer.getDouble("data."+temp2+".jz");
+                		EulerAngle ea = new EulerAngle(jz,jy,jz);
+                		create(item,location,ea);
+                		sender.sendMessage(prefix+"物品<"+temp2+">已被创建在< x="+x+" | y="+y+" | z="+z+" >");
+                	}
+                }
+                default:
+                	CSBZ(sender);
+                	return true;
+                }
+                                              
         }
        return false;
+	}
+	
+	/**
+	 * 创建一个物品实体</br>
+	 * @param item 需要创建的物体
+	 * @param location 需要创建的位置(可能会有偏差，这是创建的盔甲架位置，物品应在盔甲架的头部)
+	 * @param ea 物品偏转角
+	 */
+	static void create(ItemStack item,Location location, EulerAngle ea)
+	{
+        Entity en = location.getWorld().spawnEntity(location,EntityType.ARMOR_STAND);
+        ArmorStand as = (ArmorStand)en;
+//        as.setArms(true);
+        as.setHelmet(item);
+    	as.setHeadPose(ea);
+    	as.setInvulnerable(true);//无敌
+    	as.setGravity(false);//重力
+    	as.setVisible(false);//隐身
 	}
 	
 	static void CSBZ(CommandSender sender)
