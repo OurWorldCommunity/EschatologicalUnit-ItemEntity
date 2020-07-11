@@ -85,7 +85,7 @@ public class smyhw extends JavaPlugin implements Listener
                     EulerAngle ea = new EulerAngle(new Double(args[1]),new Double(args[2]),new Double(args[3]));
                     create(item,l,ea);
 
-                	if(args.length<5 && args[4].equals("config"))
+                	if(args.length>4 && args[4].equals("config"))
                 	{
                 		Set<String> temp1 = configer.getConfigurationSection("data").getKeys(false);
                 		int temp2 = temp1.size();
