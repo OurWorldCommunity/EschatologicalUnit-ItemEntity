@@ -111,17 +111,18 @@ public class smyhw extends JavaPlugin implements Listener
                 	for(String temp2:temp1)
                 	{
                 		ItemStack item = configer.getItemStack("data."+temp2+".item");
-                		int x = configer.getInt("data."+temp2+".x");
-                		int y = configer.getInt("data."+temp2+".y");
-                		int z = configer.getInt("data."+temp2+".z");
+                		Double x = configer.getDouble("data."+temp2+".x");
+                		Double y = configer.getDouble("data."+temp2+".y");
+                		Double z = configer.getDouble("data."+temp2+".z");
                 		Location location = new Location(Bukkit.getWorld(configer.getString("data."+temp2+".world")),x,y,z);
                 		Double jx = configer.getDouble("data."+temp2+".jx");
                 		Double jy = configer.getDouble("data."+temp2+".jy");
                 		Double jz = configer.getDouble("data."+temp2+".jz");
-                		EulerAngle ea = new EulerAngle(jz,jy,jz);
+                		EulerAngle ea = new EulerAngle(jx,jy,jz);
                 		create(item,location,ea);
                 		sender.sendMessage(prefix+"物品<"+temp2+">已被创建在< x="+x+" | y="+y+" | z="+z+" >");
                 	}
+                	return true;
                 }
                 default:
                 	CSBZ(sender);
