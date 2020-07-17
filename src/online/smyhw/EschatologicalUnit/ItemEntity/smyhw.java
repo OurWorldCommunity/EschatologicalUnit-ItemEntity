@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -57,6 +58,13 @@ public class smyhw extends JavaPlugin implements Listener
 	{
 		getLogger().info("EschatologicalUnit.ItemEntity卸载");
     }
+	
+	
+	@EventHandler
+	public void cantDo(PlayerArmorStandManipulateEvent e)
+	{
+		if(e.getPlayerItem().getType()!=Material.AIR) {e.setCancelled(true);}
+	}
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
